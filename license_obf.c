@@ -38,7 +38,7 @@ int main(void) {
 
  // VM-based 난독화
  static int vm_execute(const uint8_t *code, uintptr_t *memory) {
-    int16_t reg[16] = {0};
+    uintptr_t reg[16] = {0};
     uint8_t pc = 0;
     uint8_t zflag = 0;
 
@@ -54,7 +54,7 @@ int main(void) {
             case 0x02: { // STORE
                 uint8_t mem_address = code[++pc] - 0xA0;
                 uint8_t reg_index = code[++pc];
-                memory[mem_address] = reg[reg_index];
+                memory[mem_address] = (uintptr_t)reg[reg_index];
             }
             break;
 
@@ -88,7 +88,7 @@ int main(void) {
             case 0x06: { // target
                 uint8_t target_address = code[++pc];
                 if (zflag) {
-                    pc = target_address;
+                    pc = target_address - 1;
                 }
             }
             break;
@@ -183,6 +183,7 @@ int secret_check(const char *user, const char *key) {
                 memory[0xA1 - 0xA0] = (uintptr_t)key;
                 memory[0xA2 - 0xA0] = (uintptr_t)e_u;
                 memory[0xA3 - 0xA0] = (uintptr_t)e_k;
+                memory[0xA4 - 0xA0] = 1;
 
                 uint8_t bytecode[] = {
                     // user_check:
