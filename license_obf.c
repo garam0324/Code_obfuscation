@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include <time.h>
 
 int secret_check(const char *user, const char *key);
