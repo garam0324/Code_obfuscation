@@ -184,20 +184,18 @@ int secret_check(const char *user, const char *key) {
                 memory[0xA3 - 0xA0] = (uintptr_t)e_k;
 
                 uint8_t bytecode[] = {
-                    0x01, 0x06, 0xB3, // default fail
-
                     // user_check:
                     0x01, 0x00, 0xA0, // LOAD user -> r0
                     0x01, 0x01, 0xA2, // LOAD e_u -> r1
-                    0x05, 0x00, 0x01, // CMP r0, r1
-                    0x06, 0x12,       // JZ 0x12 (user_ok로 점프)
+                    0x05, 0x00, 0x01, // CMPSTR r0, r1
+                    0x06, 0x10,       // JZ 0x10 (user_ok로 점프)
                     0xFF, 0x06, // RETURN r6 (0)
 
                     // user_ok:
                     0x01, 0x03, 0xA1, // LOAD key -> r3
                     0x01, 0x04, 0xA3, // LOAD e_k -> r4
-                    0x05, 0x03, 0x04, // CMP r3, r4
-                    0x06, 0x1E,       // JZ 0x1E (key_ok로 점프)
+                    0x05, 0x03, 0x04, // CMPSTR r3, r4
+                    0x06, 0x1C,       // JZ 0x1C (key_ok로 점프)
                     0xFF, 0x06, // RETURN r6 (0)
 
                     // key_ok:
