@@ -141,23 +141,14 @@ int secret_check(const char *user, const char *key) {
 
     // Control-flow Flattening
     sw: switch (x) {
-        case 0: { // 검증 실패
-            return 0;
-        }
 
         case 999: {// Dead Code
             const char *expected_user = "root";
             const char *expected_key = "SECURE-CODING-2025";
             if (strcmp(user, expected_user) == 0 && strcmp(key, expected_key) == 0) {
-                x = 100;
-                goto sw;
+                x = 1;
             }
-            x = 1;
             goto sw;
-        }
-
-        case 100: { // 검증 성공
-            return 1;
         }
 
         case 77: { // 루프로 재조립
@@ -175,7 +166,7 @@ int secret_check(const char *user, const char *key) {
         }
 
         case 1: { // Dead Code 종료
-            return -1;
+            return 0;
         }
 
         case 256: { // xor로 복호화
