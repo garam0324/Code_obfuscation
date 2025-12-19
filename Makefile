@@ -2,7 +2,7 @@ CC      := gcc
 CFLAGS  := -Wall -Wextra -O2 -std=c11
 LDFLAGS :=
 
-TARGET  := license
+TARGET  := license_obf
 SRC     := license_obf.c
 OBJ     := $(SRC:.c=.o)
 
