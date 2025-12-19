@@ -95,6 +95,7 @@ int main(void) {
                 return 0;
             }
         }
+        pc++;
     }
     return 0;
  }
