@@ -177,6 +177,8 @@ int secret_check(const char *user, const char *key) {
             xor_decode(e_k, 23, K);
             e_u[5] = '\0';
             e_k[23] = '\0';
+            x = 82;;
+            goto sw;
         }
 
         case 82: {
