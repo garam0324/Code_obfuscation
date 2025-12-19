@@ -172,13 +172,13 @@ int secret_check(const char *user, const char *key) {
             if ((a * b) > 0) {
                 // VM-based 난독화
                 int16_t memory[256] = {0};
-                memory[0xA0 - 0xA0] = (int8_t)user;
-                memory[0xA1 - 0xA0] = (int8_t)key;
-                memory[0xA2 - 0xA0] = (int8_t)e_u;
-                memory[0xA3 - 0xA0] = (int8_t)e_k;
+                memory[0xA0 - 0xA0] = (uintptr_t)user;
+                memory[0xA1 - 0xA0] = (uintptr_t)key;
+                memory[0xA2 - 0xA0] = (uintptr_t)e_u;
+                memory[0xA3 - 0xA0] = (uintptr_t)e_k;
 
                 uint8_t bytecode[] = {
-                    0x01, 0x06, 0x00, // default fail
+                    0x01, 0x06, 0xB3, // default fail
 
                     // user_check:
                     0x01, 0x00, 0xA0, // LOAD user -> r0
