@@ -1,4 +1,4 @@
-// license_original.c
+// license_obf.c
 
 #include <stdio.h>
 #include <string.h>
@@ -141,19 +141,26 @@ int secret_check(const char *user, const char *key) {
 
     // Control-flow Flattening
     sw: switch (x) {
-        case 0: // 검증 실패
+        case 0: { // 검증 실패
             return 0;
+        }
 
-        case 999: // Dead Code
-            printf("[ERROR] Dead code executed.\n");
+        case 999: {// Dead Code
+            const char *expected_user = "root";
+            const char *expected_key = "SECURE-CODING-2025";
+            if (strcmp(user, expected_user) == 0 && strcmp(key, expected_key) == 0) {
+                x = 100;
+                goto sw;
+            }
             x = 1;
             goto sw;
+        }
 
-
-        case 100: // 검증 성공
+        case 100: { // 검증 성공
             return 1;
+        }
 
-        case 77: // 루프로 재조립
+        case 77: { // 루프로 재조립
             int ui = 0, ki = 0;
             for (int i = 0; i < 31; i++) {
                 int take_u = ((i % 4) == 0 && ui < 8);
@@ -165,11 +172,13 @@ int secret_check(const char *user, const char *key) {
             }
             x = 256;
             goto sw;
+        }
 
-        case 1: // Dead Code 종료
+        case 1: { // Dead Code 종료
             return -1;
+        }
 
-        case 256: // xor로 복호화
+        case 256: { // xor로 복호화
             xor_decode(e_u , 5, K);
             xor_decode(e_k, 23, K);
             e_u[5] = '\0';
@@ -190,14 +199,14 @@ int secret_check(const char *user, const char *key) {
                     0x01, 0x00, 0xA0, // LOAD user -> r0
                     0x01, 0x01, 0xA2, // LOAD e_u -> r1
                     0x05, 0x00, 0x01, // CMPSTR r0, r1
-                    0x06, 0x10,       // JZ 0x10 (user_ok로 점프)
+                    0x06, 0x0D,       // JZ 0x0D (user_ok로 점프)
                     0xFF, 0x06, // RETURN r6 (0)
 
                     // user_ok:
                     0x01, 0x03, 0xA1, // LOAD key -> r3
                     0x01, 0x04, 0xA3, // LOAD e_k -> r4
                     0x05, 0x03, 0x04, // CMPSTR r3, r4
-                    0x06, 0x1C,       // JZ 0x1C (key_ok로 점프)
+                    0x06, 0x1A,       // JZ 0x1A (key_ok로 점프)
                     0xFF, 0x06, // RETURN r6 (0)
 
                     // key_ok:
@@ -217,9 +226,11 @@ int secret_check(const char *user, const char *key) {
                 x = 999; // Dead code
             }
             goto sw;
+        }
 
-        default:
+        default: {
             return 0;
+        }
 
     }
 }
