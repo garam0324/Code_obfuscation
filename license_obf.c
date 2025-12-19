@@ -44,49 +44,50 @@ int main(void) {
     while (1) {
         switch (code[pc]) {
             case 0x01: { // LOAD
-                uint8_t reg_index = code[pc++];
-                uint8_t mem_address = code[pc++] - 0xA0;
+                uint8_t reg_index = code[++pc];
+                uint8_t mem_address = code[++pc] - 0xA0;
                 reg[reg_index] = memory[mem_address];
-                break;
             }
+            break;
 
             case 0x02: { // STORE
-                uint8_t mem_address = code[pc++] - 0xA0;
-                uint8_t reg_index = code[pc++];
+                uint8_t mem_address = code[++pc] - 0xA0;
+                uint8_t reg_index = code[++pc];
                 memory[mem_address] = reg[reg_index];
-                break;
             }
+            break;
+
             case 0x03: { //ADD
-                uint8_t reg_index1 = code[pc++];
-                uint8_t reg_index2 = code[pc++];
+                uint8_t reg_index1 = code[++pc];
+                uint8_t reg_index2 = code[++pc];
                 reg[reg_index1] += reg[reg_index2];
-                break;
             }
+            break;
 
             case 0x04: { // SUB
-                uint8_t reg_index1 = code[pc++];
-                uint8_t reg_index2 = code[pc++];
+                uint8_t reg_index1 = code[++pc];
+                uint8_t reg_index2 = code[++pc];
                 reg[reg_index1] -= reg[reg_index2];
-                break;
             }
+            break;
 
             case 0x05: { // CMP
-                uint8_t reg_index1 = code[pc++];
-                uint8_t reg_index2 = code[pc++];
+                uint8_t reg_index1 = code[++pc];
+                uint8_t reg_index2 = code[++pc];
                 zflag = (reg[reg_index1] == reg[reg_index2]);
-                break;
             }
+            break;
 
             case 0x06: { // target
-                uint8_t target_address = code[pc++];
+                uint8_t target_address = code[++pc];
                 if (zflag) {
                     pc = target_address;
                 }
-                break;
             }
+            break;
 
             case 0xFF: { // RETURN
-                uint8_t reg_index = code[pc++];
+                uint8_t reg_index = code[++pc];
                 return (int)reg[reg_index];
             }
 
