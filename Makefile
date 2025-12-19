@@ -3,7 +3,7 @@ CFLAGS  := -Wall -Wextra -O2 -std=c11
 LDFLAGS :=
 
 TARGET  := license
-SRC     := license_original.c
+SRC     := license_obf.c
 OBJ     := $(SRC:.c=.o)
 
 .PHONY: all clean run debug
