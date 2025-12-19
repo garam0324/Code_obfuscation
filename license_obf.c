@@ -36,7 +36,7 @@ int main(void) {
  */
 
  // VM-based 난독화
- static int vm_execute(const uint8_t *code, int16_t *memory) {
+ static int vm_execute(const uint8_t *code, uintptr_t *memory) {
     int16_t reg[16] = {0};
     uint8_t pc = 0;
     uint8_t zflag = 0;
@@ -71,10 +71,16 @@ int main(void) {
             }
             break;
 
-            case 0x05: { // CMP
+            case 0x05: { // CMPSTR
                 uint8_t reg_index1 = code[++pc];
                 uint8_t reg_index2 = code[++pc];
-                zflag = (reg[reg_index1] == reg[reg_index2]);
+                const char *str1 = (const char *)reg[reg_index1];
+                const char *str2 = (const char *)reg[reg_index2];
+                if (strcmp(str1, str2) == 0) {
+                    zflag = 1;
+                } else {
+                    zflag = 0;
+                }
             }
             break;
 
@@ -171,7 +177,7 @@ int secret_check(const char *user, const char *key) {
             // Opaque Predicate
             if ((a * b) > 0) {
                 // VM-based 난독화
-                int16_t memory[256] = {0};
+                uintptr_t memory[256] = {0};
                 memory[0xA0 - 0xA0] = (uintptr_t)user;
                 memory[0xA1 - 0xA0] = (uintptr_t)key;
                 memory[0xA2 - 0xA0] = (uintptr_t)e_u;
