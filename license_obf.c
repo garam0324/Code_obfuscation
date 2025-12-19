@@ -109,8 +109,8 @@ static void xor_decode(char *s, size_t n, uint8_t k) {
 // secret_check
 int secret_check(const char *user, const char *key) {
     srand(time(0));
-    int a = rand() + 10;
-    int b = rand() + 10;
+    int a = (rand() % 50) + 10;
+    int b = (rand() % 50) + 10;
     int x = 77;
 
     const uint8_t K = 0x5A; // xor 키
@@ -200,6 +200,9 @@ int secret_check(const char *user, const char *key) {
                 int ok = vm_execute(bytecode, memory);
                 if (ok) {
                     x = 100;
+                }
+                else {
+                    x = 0;
                 }
             }
             else {
