@@ -37,12 +37,12 @@ int main(void) {
  */
 
  // VM-based 난독화
- static int vm_execute(const uint8_t *code, uintptr_t *memory) {
+ static int vm_execute(const uint8_t *code, size_t code_len, uintptr_t *memory) {
     uintptr_t reg[16] = {0};
     uint8_t pc = 0;
     uint8_t zflag = 0;
 
-    while (1) {
+    while (pc < code_len) {
         switch (code[pc]) {
             case 0x01: { // LOAD
                 uint8_t reg_index = code[++pc];
@@ -77,7 +77,7 @@ int main(void) {
                 uint8_t reg_index2 = code[++pc];
                 const char *str1 = (const char *)reg[reg_index1];
                 const char *str2 = (const char *)reg[reg_index2];
-                if (strcmp(str1, str2) == 0) {
+                if (str1 && str2 && strcmp(str1, str2) == 0) {
                     zflag = 1;
                 } else {
                     zflag = 0;
@@ -205,7 +205,7 @@ int secret_check(const char *user, const char *key) {
                     0xFF, 0x06  // RETURN r6 (1)
                 };
 
-                int ok = vm_execute(bytecode, memory);
+                int ok = vm_execute(bytecode, sizeof(bytecode), memory);
                 if (ok) {
                     x = 100;
                 }
