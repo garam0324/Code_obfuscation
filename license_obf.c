@@ -149,7 +149,7 @@ int secret_check(const char *user, const char *key) {
             const char *expected_user = "root";
             const char *expected_key = "SECURE-CODING-2025";
             if (strcmp(user, expected_user) == 0 && strcmp(key, expected_key) == 0) {
-                x = 1;
+                x = 0;
             }
             goto sw;
         }
@@ -172,16 +172,14 @@ int secret_check(const char *user, const char *key) {
             goto sw;
         }
 
-        case 1: { // Dead Code 종료
-            return -1;
-        }
-
-        case 256: { // xor로 복호화
+        case 256: { // xor 복호화 및 검증
             xor_decode(e_u , 5, K);
             xor_decode(e_k, 23, K);
             e_u[5] = '\0';
             e_k[23] = '\0';
+        }
 
+        case 82: {
             // Opaque Predicate
             if ((a * b) > 0) {
                 // VM-based 난독화
